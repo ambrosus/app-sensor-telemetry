@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+const debug = require("debug")("api:server"),
+    http  = require("http"),
+    util  = require("util");
+
+let config = require("../config"),
+    server = require("../server/index"),
+    pjson  = require("../package.json");
+
+let host = config.get("host");
+let port = config.get("port");
+
+let app = http.createServer(server);
+app.listen(port, host, function() {
+    process.title = pjson.name + " " + pjson.version;
+    process.title = util.format("%s %s listening on %s:%s", pjson.name, pjson.version, host, port);
+    debug("API service started on %s:%s", host, port);
+});
+
+/**
+ * Start http server and attach signal handlers.
+ */
+let stop = function(msg) {
+    process.exit();
+};
+
+process.on("uncaughtException", function(err) {
+    debug(err.stack);
+    debug("uncaughtException", err);
+}).on("SIGINT", function() {
+    stop("Received SIGINT Ctrl+C signal. API service shutdown.");
+}).on("SIGTERM", function() {
+    stop("Received SIGTERM signal. API service shutdown.");
+}).on("exit", function() {
+    stop("API service shutdown.");
+});
