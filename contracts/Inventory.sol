@@ -12,7 +12,6 @@ contract Inventory {
     function Inventory()
         public
     {
-
     }
 
     /**
@@ -21,11 +20,20 @@ contract Inventory {
     function addShipment(
         address _owner,
         bytes32 _shipmentId,
-        string _name
+        string _name,
+        uint8 _minTempCelcius,
+        uint8 _maxTempCelcius,
+        uint8 _minHumidity,
+        uint8 _maxHumidity,
+        uint8 _minAirPressure,
+        uint8 _maxAirPressure
     )
         public
     {
-        shipments[_owner][_shipmentId] = new Shipment(_owner, _shipmentId, _name);
+        shipments[_owner][_shipmentId] = new Shipment(_owner, _shipmentId, _name,
+            _minTempCelcius, _maxTempCelcius,
+            _minHumidity, _maxHumidity,
+            _minAirPressure, _maxAirPressure);
     }
 
     /**
