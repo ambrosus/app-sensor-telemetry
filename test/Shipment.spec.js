@@ -13,8 +13,6 @@ contract('Shipment API', (accounts) => {
         this.shipmentId = "Shipment-123";
 
         await this.inventory.addShipment(owner, this.shipmentId, "Tylenol", 1, 5, 40, 50, 1100, 1150);
-        let shipments = await this.inventory.shipments.call();
-        console.log(shipments);
     });
 
     describe("Storage and retrieval", () => {
