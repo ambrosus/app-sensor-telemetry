@@ -13,12 +13,13 @@ $ npm install
 $ testrpc -u0 -u1 -u2 -u3
 ``` 
 
-NOTE: If you don't have testrpc, you can install like so: `npm i -g ethereumjs-testrpc`
+NOTE: If you don't have `testrpc`, you can install like so: `npm i -g ethereumjs-testrpc`
 
 3. Deploy contracts to the network
 ```
 $ truffle migrate
 ``` 
+NOTE: If you don't have `truffle`, you can install like so: `npm i -g truffle`
 
 4. Start Web server
 ```
