@@ -15,16 +15,13 @@ $ npm install
 ```
 2. In a separate shell, start testrpc
 ```
-$ testrpc -u0 -u1 -u2 -u3
+$ npx testrpc 
 ``` 
-
-NOTE: If you don't have `testrpc`, you can install like so: `npm i -g ethereumjs-testrpc`
 
 3. Deploy contracts to the network
 ```
-$ truffle migrate
+$ npx truffle migrate
 ``` 
-NOTE: If you don't have `truffle`, you can install like so: `npm i -g truffle`
 
 4. Start Web server
 ```
