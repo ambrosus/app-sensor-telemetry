@@ -1,6 +1,11 @@
 ## app-sensor-telemetry
 This application demonstrates capturing sensor measurements on the blockchain using Ambrosus API.
 
+It's composed of:
+1. A local connection to our private Ethereum test network using testrpc
+2. A local node.js app (bridge) that receives data from sensors and pushes it 
+3. An ethereum smart contract that receives sensor data periodically and reacts if sensed data exceeds a predefined threshold
+
 ## Installation 
 1. Clone this repo and install dependencies
 ```
@@ -38,16 +43,16 @@ $ npm start
 
 ## Usage
 1. Create an account at [https://dev.ambrosus.com](https://dev.ambrosus.com) and get an address and secret. 
-2. Open a browser and send a shipment and sensor data like so:
+2. Open a browser and go to the app by passing sensor data in the query params as follows:
 ```
 http://localhost:3000/telemetry/send?
-    owner=0x2EB...4474
-    &secret=0xa0e13...456fd
+    owner=[your-address]
+    &secret=[your-secret]
     &shipmentId=123
     &name=Tylenol
     &temp=5
-    &humiditiy=40
-    &aipressure=1000
+    &humidity=40
+    &pressure=1000
 ```
 
 A shipment is created if it doesn't exist. all subsequent calls add sensor information to the given `shipmentId`.
