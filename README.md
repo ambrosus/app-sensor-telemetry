@@ -66,7 +66,7 @@ http://localhost:3000/telemetry?
     &aipressure=1000
 ```
 
-Both shipment and sensor data are uploaded to the smart contract. After submitting a data from sensor, it's verified by smart contract to fulfill all requirements. If it doesn't, the smart contract marks whole shipment as defective. To check the shipment status, go by URL:
+Both shipment and sensor data are uploaded to the smart contract. After submitting a data from sensor, it's verified by smart contract to fulfill all requirements(e.g. temperature, humidity and air pressure). If it doesn't, the smart contract marks whole shipment as defective. To check the shipment status, go by URL:
 
 ```
 http://localhost:3000/status?
@@ -75,4 +75,3 @@ http://localhost:3000/status?
 ```
 If the shipment's quality is too low, the owner may be punished in some way, for example by giving a rebate to the customer or by reducing the balance of shipment's owner in the Ambrosus Network.  
 To further examine all events related to the shipment, you can check the  [Ambrosus Network](https://dev.ambrosus.com/).
-
