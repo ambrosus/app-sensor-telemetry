@@ -43,17 +43,39 @@ $ npm start
 
 ## Usage
 1. Create an account at [https://dev.ambrosus.com](https://dev.ambrosus.com) and get an address and secret. 
-2. Open a browser and go to the app by passing sensor data in the query params as follows:
+2. Open a browser and create a shipment by going to:
 ```
-http://localhost:3000/telemetry/send?
-    owner=[your-address]
-    &secret=[your-secret]
+http://localhost:3000/shipment?
+    owner=0x2EB...4474
+    &secret=0xa0e13...456fd
+    &shipmentId=123
+    &name=Tylenol
+    &minTemp=0
+    &maxTemp=10
+    &minHumiditiy=40
+    &maxHumiditiy=45
+    &minAirPressure=980
+    &maxAirPressure=1010
+```
+3. Then submit sensor data like so:
+```
+http://localhost:3000/telemetry?
+    owner=0x2EB...4474
+    &secret=0xa0e13...456fd
     &shipmentId=123
     &name=Tylenol
     &temp=5
-    &humidity=40
-    &pressure=1000
+    &humiditiy=40
+    &aipressure=1000
 ```
 
-A shipment is created if it doesn't exist. all subsequent calls add sensor information to the given `shipmentId`.
+Both shipment and sensor data are uploaded to the smart contract. After submitting a data from sensor, it's verified by smart contract to fulfill all requirements. If it doesn't, the smart contract marks whole shipment as defective. To check the shipment status, go by URL:
+
+```
+http://localhost:3000/status?
+    owner=0x2EB...4474
+    &shipmentId=123
+```
+If the shipment's quality is too low, the owner may be punished in some way, for example by giving a rebate to the customer or by reducing the balance of shipment's owner in the Ambrosus Network.  
+To further examine all events related to the shipment, you can check the  [Ambrosus Network](https://dev.ambrosus.com/).
 
