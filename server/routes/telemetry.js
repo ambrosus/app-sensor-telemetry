@@ -15,7 +15,7 @@ router.get('/telemetry', function (req, res) {
   let secret = req.query.secret
   let shipmentId = req.query.shipmentId
   let name = req.query.name
-  let temp = req.query.temp
+  let temperature = req.query.temperature
   let humidity = req.query.humidity
   let airpressure = req.query.airpressure
 
@@ -38,7 +38,7 @@ router.get('/telemetry', function (req, res) {
     }
   }).then(function (asset) {
     debug('Adding events to asset:', asset)
-    return createEvent(req.inventoryContract, req.web3, owner, secret, asset.id, temp, humidity,
+    return createEvent(req.inventoryContract, req.web3, owner, secret, asset.id, temperature, humidity,
       airpressure, shipmentId)
   }).then(function (parsedBody) {
     return res.status(200).json(parsedBody)
@@ -50,13 +50,13 @@ router.get('/telemetry', function (req, res) {
 
 router.get('/shipment', async (req, res) => {
   const {
-    owner, shipmentId, name, minTemp, maxTemp, minHumidity, maxHumidity,
+    owner, shipmentId, name, minTemperature, maxTemperature, minHumidity, maxHumidity,
     minAirPressure, maxAirPressure,
   } = req.query
   const sender = (await req.web3.eth.getAccounts())[0]
   await req.inventoryContract.methods.addShipment(
     owner, req.web3.utils.toHex(shipmentId), name,
-    minTemp, maxTemp, minHumidity, maxHumidity,
+    minTemperature, maxTemperature, minHumidity, maxHumidity,
     minAirPressure, maxAirPressure)
   .send({
     from: sender,
@@ -107,13 +107,13 @@ function createAsset (owner, secret, shipmentId, name) {
  * @param owner
  * @param secret
  * @param assetId
- * @param temp
+ * @param temperature
  * @param humidity
  * @param airpressure
  * @returns {*}
  */
 function createEvent (
-  contract, web3, owner, secret, assetId, temp, humidity, airpressure, shipmentId) {
+  contract, web3, owner, secret, assetId, temperature, humidity, airpressure, shipmentId) {
   return rp({
     method: 'POST',
     uri: 'https://network.ambrosus.com/assets/' + assetId + '/events',
@@ -125,7 +125,7 @@ function createEvent (
           'subject': assetId,
           'creator': owner,
           'created_at': Date.now(),
-          'temp': temp,
+          'temperature': temperature,
           'humidity': humidity,
           'airpressure': airpressure,
         },
@@ -135,7 +135,7 @@ function createEvent (
   }).then(async (event) => {
     const sender = (await web3.eth.getAccounts())[0]
     await contract.methods.addTelemetry(owner, web3.utils.toHex(shipmentId),
-      web3.utils.toHex(event.id), temp, humidity, airpressure)
+      web3.utils.toHex(event.id), temperature, humidity, airpressure)
     .send({
       from: sender,
       gas: 3000000,
