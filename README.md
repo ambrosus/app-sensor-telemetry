@@ -15,12 +15,12 @@ $ npm install
 ```
 2. In a separate shell, start testrpc
 ```
-$ npx testrpc 
+$ npm testrpc 
 ``` 
 
 3. Deploy contracts to the network
 ```
-$ npx truffle migrate
+$ npm truffle migrate
 ``` 
 
 4. Start Web server
@@ -63,7 +63,7 @@ http://localhost:3000/telemetry?
     &name=Tylenol
     &temperature=5
     &humidity=40
-    &aipressure=1000
+    &airpressure=1000
 ```
 
 Both shipment and sensor data are uploaded to the smart contract. After submitting a data from sensor, it's verified by smart contract to fulfill all requirements(e.g. temperature, humidity and air pressure). If it doesn't, the smart contract marks whole shipment as defective. To check the shipment status, go by URL:
