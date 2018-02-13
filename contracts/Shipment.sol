@@ -1,22 +1,22 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.4.18;
 
 contract Shipment {
 
     struct Telemetry {
         bytes32 eventId;
-        uint8 tempCelcius;
-        uint8 humidity;
-        uint8 airPressure;
+        uint256 tempCelcius;
+        uint256 humidity;
+        uint256 airPressure;
         uint timestamp;
     }
 
     struct Constraints {
-        uint8 minTempCelcius;
-        uint8 maxTempCelcius;
-        uint8 minHumidity;
-        uint8 maxHumidity;
-        uint8 minAirPressure;
-        uint8 maxAirPressure;
+        uint256 minTempCelcius;
+        uint256 maxTempCelcius;
+        uint256 minHumidity;
+        uint256 maxHumidity;
+        uint256 minAirPressure;
+        uint256 maxAirPressure;
     }
 
     Telemetry[] readings;
@@ -34,13 +34,13 @@ contract Shipment {
      */
 
     /// Temperature reading not in range
-    event LogTempConstraintViolation(bytes32 shipmentId, uint8 actualValue, uint8 minValue, uint8 maxValue);
+    event LogTempConstraintViolation(bytes32 shipmentId, uint256 actualValue, uint256 minValue, uint256 maxValue);
 
     /// Humidity reading not in range
-    event LogHumidityConstraintViolation(bytes32 shipmentId, uint8 actualValue, uint8 minValue, uint8 maxValue);
+    event LogHumidityConstraintViolation(bytes32 shipmentId, uint256 actualValue, uint256 minValue, uint256 maxValue);
 
     /// Air pressre reading not in range
-    event LogAirPressureConstraintViolation(bytes32 shipmentId, uint8 actualValue, uint8 minValue, uint8 maxValue);
+    event LogAirPressureConstraintViolation(bytes32 shipmentId, uint256 actualValue, uint256 minValue, uint256 maxValue);
 
 
     /**
@@ -50,12 +50,12 @@ contract Shipment {
         address _owner,
         bytes32 _shipmentId,
         string _name,
-        uint8 _minTempCelcius,
-        uint8 _maxTempCelcius,
-        uint8 _minHumidity,
-        uint8 _maxHumidity,
-        uint8 _minAirPressure,
-        uint8 _maxAirPressure
+        uint256 _minTempCelcius,
+        uint256 _maxTempCelcius,
+        uint256 _minHumidity,
+        uint256 _maxHumidity,
+        uint256 _minAirPressure,
+        uint256 _maxAirPressure
     )
         public
     {
@@ -73,24 +73,32 @@ contract Shipment {
 
     function addTelemetry(
         bytes32 _eventId,
-        uint8 _tempCelcius,
-        uint8 _humidity,
-        uint8 _airPressure
+        uint256 _tempCelcius,
+        uint256 _humidity,
+        uint256 _airPressure
     )
         public
     {
         readings.push(Telemetry(_eventId, _tempCelcius, _humidity, _airPressure, now));
+    }
 
+    function isFailing(
+        uint256 _tempCelcius,
+        uint256 _humidity,
+        uint256 _airPressure
+    ) constant public returns (uint) {
         if(_tempCelcius < constraints.minTempCelcius || _tempCelcius > constraints.maxTempCelcius) {
-            LogTempConstraintViolation(shipmentId, _tempCelcius, constraints.minTempCelcius, constraints.maxTempCelcius);
+            return 1;
         }
 
         if(_humidity < constraints.minHumidity || _humidity > constraints.maxHumidity) {
-            LogHumidityConstraintViolation(shipmentId, _humidity, constraints.minHumidity, constraints.maxHumidity);
+            return 1;
         }
 
         if(_airPressure < constraints.minAirPressure || _airPressure > constraints.maxAirPressure) {
-            LogAirPressureConstraintViolation(shipmentId, _airPressure, constraints.minAirPressure, constraints.maxAirPressure);
+            return 1;
         }
+
+        return 0;
     }
 }
