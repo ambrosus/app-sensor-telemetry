@@ -1,10 +1,12 @@
-pragma solidity ^0.4.17;
+pragma solidity ^0.4.18;
 
 import "./Shipment.sol";
 
 contract Inventory {
 
     mapping(address => mapping(bytes32 => Shipment)) public shipments;
+    mapping(address => mapping(bytes32 => uint)) public failing;
+
 
     /**
      * Constructor to keep track of shipments
@@ -51,6 +53,15 @@ contract Inventory {
     {
         Shipment aShipment = shipments[_owner][_shipmentId];
         aShipment.addTelemetry(_eventId, _temperature, _humidity, _airPressure);
+        failing[_owner][_shipmentId] = aShipment.isFailing(_temperature, _humidity, _airPressure);
+    }
+
+    function status(
+        address _owner,
+        bytes32 _shipmentId
+    ) public view returns (uint) 
+    {
+        return 1-failing[_owner][_shipmentId];
     }
 
 }

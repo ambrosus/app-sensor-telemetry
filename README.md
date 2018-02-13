@@ -1,6 +1,11 @@
 ## app-sensor-telemetry
 This application demonstrates capturing sensor measurements on the blockchain using Ambrosus API.
 
+It's composed of:
+1. A local connection to our private Ethereum test network using testrpc
+2. A local node.js app (bridge) that receives data from sensors and pushes it 
+3. An ethereum smart contract that receives sensor data periodically and reacts if sensed data exceeds a predefined threshold
+
 ## Installation 
 1. Clone this repo and install dependencies
 ```
@@ -10,16 +15,13 @@ $ npm install
 ```
 2. In a separate shell, start testrpc
 ```
-$ testrpc -u0 -u1 -u2 -u3
+$ npx testrpc 
 ``` 
-
-NOTE: If you don't have `testrpc`, you can install like so: `npm i -g ethereumjs-testrpc`
 
 3. Deploy contracts to the network
 ```
-$ truffle migrate
+$ npx truffle migrate
 ``` 
-NOTE: If you don't have `truffle`, you can install like so: `npm i -g truffle`
 
 4. Start Web server
 ```
@@ -38,17 +40,38 @@ $ npm start
 
 ## Usage
 1. Create an account at [https://dev.ambrosus.com](https://dev.ambrosus.com) and get an address and secret. 
-2. Open a browser and send a shipment and sensor data like so:
+2. Open a browser and create a shipment by going to:
 ```
-http://localhost:3000/telemetry/send?
+http://localhost:3000/shipment?
     owner=0x2EB...4474
     &secret=0xa0e13...456fd
     &shipmentId=123
     &name=Tylenol
-    &temp=5
-    &humiditiy=40
+    &minTemperature=0
+    &maxTemperature=10
+    &minHumidity=40
+    &maxHumidity=65
+    &minAirPressure=980
+    &maxAirPressure=1010
+```
+3. Then submit sensor data like so:
+```
+http://localhost:3000/telemetry?
+    owner=0x2EB...4474
+    &secret=0xa0e13...456fd
+    &shipmentId=123
+    &name=Tylenol
+    &temperature=5
+    &humidity=40
     &aipressure=1000
 ```
 
-A shipment is created if it doesn't exist. all subsequent calls add sensor information to the given `shipmentId`.
+Both shipment and sensor data are uploaded to the smart contract. After submitting a data from sensor, it's verified by smart contract to fulfill all requirements(e.g. temperature, humidity and air pressure). If it doesn't, the smart contract marks whole shipment as defective. To check the shipment status, go by URL:
 
+```
+http://localhost:3000/status?
+    owner=0x2EB...4474
+    &shipmentId=123
+```
+If the shipment's quality is too low, the owner may be punished in some way, for example by giving a rebate to the customer or by reducing the balance of shipment's owner in the Ambrosus Network.  
+To further examine all events related to the shipment, you can check the  [Ambrosus Network](https://dev.ambrosus.com/).

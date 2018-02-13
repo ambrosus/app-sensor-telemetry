@@ -1,4 +1,4 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.4.18;
 
 contract Shipment {
 
@@ -80,17 +80,25 @@ contract Shipment {
         public
     {
         readings.push(Telemetry(_eventId, _temperature, _humidity, _airPressure, now));
+    }
 
+    function isFailing(
+        uint8 _temperature,
+        uint8 _humidity,
+        uint8 _airPressure
+    ) constant public returns (uint) {
         if (_temperature < constraints.minTemperature || _temperature > constraints.maxTemperature) {
-            LogTempConstraintViolation(shipmentId, _temperature, constraints.minTemperature, constraints.maxTemperature);
+            return 1;
         }
 
         if (_humidity < constraints.minHumidity || _humidity > constraints.maxHumidity) {
-            LogHumidityConstraintViolation(shipmentId, _humidity, constraints.minHumidity, constraints.maxHumidity);
+            return 1;
         }
 
         if (_airPressure < constraints.minAirPressure || _airPressure > constraints.maxAirPressure) {
-            LogAirPressureConstraintViolation(shipmentId, _airPressure, constraints.minAirPressure, constraints.maxAirPressure);
+            return 1;
         }
+
+        return 0;
     }
 }
