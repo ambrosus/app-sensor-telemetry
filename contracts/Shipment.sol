@@ -4,15 +4,15 @@ contract Shipment {
 
     struct Telemetry {
         bytes32 eventId;
-        uint8 tempCelcius;
+        uint8 temperature;
         uint8 humidity;
         uint8 airPressure;
         uint timestamp;
     }
 
     struct Constraints {
-        uint8 minTempCelcius;
-        uint8 maxTempCelcius;
+        uint8 minTemperature;
+        uint8 maxTemperature;
         uint8 minHumidity;
         uint8 maxHumidity;
         uint8 minAirPressure;
@@ -50,8 +50,8 @@ contract Shipment {
         address _owner,
         bytes32 _shipmentId,
         string _name,
-        uint8 _minTempCelcius,
-        uint8 _maxTempCelcius,
+        uint8 _minTemperature,
+        uint8 _maxTemperature,
         uint8 _minHumidity,
         uint8 _maxHumidity,
         uint8 _minAirPressure,
@@ -63,8 +63,8 @@ contract Shipment {
         shipmentId = _shipmentId;
         name = _name;
 
-        constraints.minTempCelcius = _minTempCelcius;
-        constraints.maxTempCelcius = _maxTempCelcius;
+        constraints.minTemperature = _minTemperature;
+        constraints.maxTemperature = _maxTemperature;
         constraints.minHumidity = _minHumidity;
         constraints.maxHumidity = _maxHumidity;
         constraints.minAirPressure = _minAirPressure;
@@ -73,23 +73,23 @@ contract Shipment {
 
     function addTelemetry(
         bytes32 _eventId,
-        uint8 _tempCelcius,
+        uint8 _temperature,
         uint8 _humidity,
         uint8 _airPressure
     )
         public
     {
-        readings.push(Telemetry(_eventId, _tempCelcius, _humidity, _airPressure, now));
+        readings.push(Telemetry(_eventId, _temperature, _humidity, _airPressure, now));
 
-        if(_tempCelcius < constraints.minTempCelcius || _tempCelcius > constraints.maxTempCelcius) {
-            LogTempConstraintViolation(shipmentId, _tempCelcius, constraints.minTempCelcius, constraints.maxTempCelcius);
+        if (_temperature < constraints.minTemperature || _temperature > constraints.maxTemperature) {
+            LogTempConstraintViolation(shipmentId, _temperature, constraints.minTemperature, constraints.maxTemperature);
         }
 
-        if(_humidity < constraints.minHumidity || _humidity > constraints.maxHumidity) {
+        if (_humidity < constraints.minHumidity || _humidity > constraints.maxHumidity) {
             LogHumidityConstraintViolation(shipmentId, _humidity, constraints.minHumidity, constraints.maxHumidity);
         }
 
-        if(_airPressure < constraints.minAirPressure || _airPressure > constraints.maxAirPressure) {
+        if (_airPressure < constraints.minAirPressure || _airPressure > constraints.maxAirPressure) {
             LogAirPressureConstraintViolation(shipmentId, _airPressure, constraints.minAirPressure, constraints.maxAirPressure);
         }
     }
