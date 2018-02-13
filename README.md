@@ -47,8 +47,8 @@ http://localhost:3000/shipment?
     &secret=0xa0e13...456fd
     &shipmentId=123
     &name=Tylenol
-    &minTemperature=0
-    &maxTemperature=10
+    &minTemp=0
+    &maxTemp=10
     &minHumidity=40
     &maxHumidity=65
     &minAirPressure=980
