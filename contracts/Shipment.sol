@@ -86,7 +86,8 @@ contract Shipment {
         uint8 _temperature,
         uint8 _humidity,
         uint8 _airPressure
-    ) constant public returns (uint) {
+    ) constant public returns (uint) 
+    {
         if (_temperature < constraints.minTemperature || _temperature > constraints.maxTemperature) {
             return 1;
         }

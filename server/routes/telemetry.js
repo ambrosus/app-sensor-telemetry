@@ -70,7 +70,7 @@ router.get('/status', async (req, res) => {
   const status = await req.inventoryContract.methods.status(
     owner, req.web3.utils.toHex(shipmentId)
   ).call();
-  return res.status(200).send({status: status>0?'OK':'Something is wrong' });
+  return res.status(200).send({status: status>0?'Shipment is OK.':'Problem with shipment.' });
 })
 
 /**

@@ -10,7 +10,7 @@ contract('Shipment API', (accounts) => {
 
     before(async () => {
         this.inventory  = await Inventory.deployed();
-        this.shipmentId = "Shipment-123";
+        this.shipmentId = "123";
 
         await this.inventory.addShipment(owner, this.shipmentId, "Tylenol", 1, 5, 40, 50, 1100, 1150);
     });
@@ -22,7 +22,7 @@ contract('Shipment API', (accounts) => {
         });
 
         it("should trigger a violation event", async () => {
-            let result = await this.inventory.addTelemetry(owner, this.shipmentId, "000", 25, 45, 1100);
+            let result = await this.inventory.addTelemetry(owner, this.shipmentId, "000", 8, 45, 1100);
         });
     });
 
